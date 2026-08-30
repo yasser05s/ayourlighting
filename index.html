@@ -858,5 +858,112 @@
   });
 </script>
 
+</body> <!-- ==================== 1. BADGES DE CONFIANCE ==================== -->
+<section style="display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 5%; background: #0f172a; color: #fff; gap: 20px;">
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <span style="font-size: 2rem;">🚚</span>
+    <div>
+      <h4 style="margin:0;">توصيل لجميع المدن</h4>
+      <p style="margin:0; font-size: 0.9rem; color: #94a3b8;">Livraison partout au Maroc</p>
+    </div>
+  </div>
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <span style="font-size: 2rem;">💵</span>
+    <div>
+      <h4 style="margin:0;">الدفع عند الاستلام</h4>
+      <p style="margin:0; font-size: 0.9rem; color: #94a3b8;">Paiement à la livraison</p>
+    </div>
+  </div>
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <span style="font-size: 2rem;">🛡️</span>
+    <div>
+      <h4 style="margin:0;">ضمان الجودة</h4>
+      <p style="margin:0; font-size: 0.9rem; color: #94a3b8;">Garantie & Qualité</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 2. FORMULAIRE DE COMMANDE ==================== -->
+<section id="order" style="padding: 50px 5%; background-color: #1e293b; color: #fff; text-align: center;">
+  <div style="max-width: 600px; margin: 0 auto;">
+    <h2 style="font-size: 1.8rem;"><span>Passer une commande</span> / <span>اطلب الآن</span></h2>
+    <p style="color: #94a3b8;">أدخل معلوماتك وسنتصل بك لتاكيد الطلب والتوصيل</p>
+
+    <form id="checkoutForm" style="margin-top: 25px; display: flex; flex-direction: column; gap: 15px; text-align: right;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label>الاسم الكامل / Nom Complet</label>
+        <input type="text" id="fullName" placeholder="مثال: ياسر بناني" required style="padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1rem;">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label>رقم الهاتف / Téléphone</label>
+        <input type="tel" id="phone" placeholder="06XXXXXXXX" required style="padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1rem;">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label>المدينة / Ville</label>
+        <input type="text" id="city" placeholder="مثال: الدار البيضاء" required style="padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1rem;">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label>المنتج المطلوب / Produit</label>
+        <select id="productSelect" required style="padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1rem;">
+          <option value="">اختر المنتج...</option>
+          <option value="Ampoules LED">Ampoules LED / لمبات</option>
+          <option value="Rubans LED">Rubans LED / أشرطة</option>
+          <option value="Applique Murale Fait Main">Applique Murale / أباليك صنع يدوي</option>
+          <option value="Éclairage Intelligent">Éclairage Intelligent / إضاءة ذكية</option>
+        </select>
+      </div>
+      <button type="submit" style="background: #22c55e; color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 10px;">
+        تأكيد الطلب عبر الواتساب 📲
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ==================== 3. AVIS CLIENTS ==================== -->
+<section style="padding: 50px 5%; text-align: center; background: #0f172a; color: #fff;">
+  <h2><span>Avis Clients</span> / <span>آراء زبنائنا</span></h2>
+  <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+    <div style="background: #1e293b; padding: 20px; border-radius: 12px; max-width: 350px; border: 1px solid #334155; text-align: right;">
+      <div style="color: #f59e0b; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
+      <p style="font-size: 0.95rem; line-height: 1.5;">"الصراحة الأباليك اليدوية طالعين واعرين بزاف فالديكور ديال الصالون. التوصيل كان سريع."</p>
+      <strong style="color: #94a3b8; display: block; margin-top: 10px;">- أمين (الرباط)</strong>
+    </div>
+    <div style="background: #1e293b; padding: 20px; border-radius: 12px; max-width: 350px; border: 1px solid #334155; text-align: right;">
+      <div style="color: #f59e0b; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
+      <p style="font-size: 0.95rem; line-height: 1.5;">"Qualité top au niveau des rubans LED. Éclairage puissant et service très réactif."</p>
+      <strong style="color: #94a3b8; display: block; margin-top: 10px;">- Sarah (Casablanca)</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4. FLOATING WHATSAPP BUTTON ==================== -->
+<a href="https://wa.me/212600000000?text=Bonjour,%20je%20souhaite%20me%20renseigner%20sur%20vos%20produits" 
+   target="_blank" 
+   aria-label="Contact WhatsApp"
+   style="position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+  💬
+</a>
+
+<script>
+  document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // ⚠️ بدّل هاد الرقم بنمرة الواتساب ديالك (مثال: 212612345678)
+    const myPhoneNumber = "212675626129"; 
+
+    const name = document.getElementById('fullName').value;
+    const phone = document.getElementById('phone').value;
+    const city = document.getElementById('city').value;
+    const product = document.getElementById('productSelect').value;
+
+    const message = `طلب جديد من الموقع 🛒:%0A` +
+                    `- الاسم: ${name}%0A` +
+                    `- الهاتف: ${phone}%0A` +
+                    `- المدينة: ${city}%0A` +
+                    `- المنتج: ${product}`;
+
+    window.open(`https://wa.me/${myPhoneNumber}?text=${message}`, '_blank');
+  });
+</script> 
 </body>
 </html>
