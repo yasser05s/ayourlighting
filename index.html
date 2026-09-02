@@ -624,6 +624,16 @@ const DEFAULT_REVIEWS = [
 
 let currentLang = localStorage.getItem("ayourLang") || "fr";
 let reviews = JSON.parse(localStorage.getItem("ayourReviews") || "null") || DEFAULT_REVIEWS;
+
+// Visit the site once with ?resetreviews=1 in the address bar (on the affected browser/device)
+// to wipe locally-saved test reviews and restore the default 3 reviews.
+if(new URLSearchParams(window.location.search).get("resetreviews") === "1"){
+  localStorage.removeItem("ayourReviews");
+  reviews = DEFAULT_REVIEWS;
+  const url = new URL(window.location.href);
+  url.searchParams.delete("resetreviews");
+  window.history.replaceState({}, "", url);
+}
 let selectedStars = 5;
 
 function setLanguage(lang){
