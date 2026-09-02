@@ -199,10 +199,19 @@
   /* theme color switcher */
   .theme-switcher{
     position:fixed; bottom:24px; inset-inline-start:24px; z-index:60; background:var(--panel);
-    border:1px solid var(--line); border-radius:999px; padding:8px; display:flex; gap:8px; box-shadow:0 8px 22px rgba(0,0,0,.4);
+    border:1px solid var(--line); border-radius:999px; padding:10px 16px; display:flex; align-items:center; gap:10px;
+    box-shadow:0 8px 22px rgba(0,0,0,.4);
   }
-  .theme-dot{ width:24px; height:24px; border-radius:50%; border:2px solid transparent; cursor:pointer; }
-  .theme-dot.active{ border-color:#fff; transform:scale(1.15); }
+  .theme-slider{
+    -webkit-appearance:none; appearance:none; width:150px; height:10px; border-radius:999px; outline:none; cursor:pointer;
+    background:linear-gradient(90deg,#ff0000,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000);
+  }
+  .theme-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:#fff; border:3px solid var(--gold); cursor:pointer;
+  }
+  .theme-slider::-moz-range-thumb{
+    width:20px; height:20px; border-radius:50%; background:#fff; border:3px solid var(--gold); cursor:pointer;
+  }
 
   /* cart drawer */
   .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:90; opacity:0; pointer-events:none; transition:.3s; }
@@ -350,6 +359,8 @@
       <h4 data-i18n="footer_follow_h"></h4>
       <a href="https://wa.me/212675626129" target="_blank">WhatsApp</a>
       <a href="#" target="_blank">Instagram</a>
+      <a href="#" target="_blank">Facebook</a>
+      <a href="#" target="_blank">TikTok</a>
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer_location_h"></h4>
@@ -363,11 +374,8 @@
 <a class="wa-float" href="https://wa.me/212675626129?text=Bonjour%2C%20je%20souhaite%20me%20renseigner%20sur%20vos%20produits" target="_blank">💬</a>
 
 <div class="theme-switcher" id="themeSwitcher">
-  <div class="theme-dot active" style="background:#eab308" onclick="setTheme(this,'#eab308','#ca8a04')" title="Or"></div>
-  <div class="theme-dot" style="background:#8b5cf6" onclick="setTheme(this,'#8b5cf6','#6d28d9')" title="Violet"></div>
-  <div class="theme-dot" style="background:#3b82f6" onclick="setTheme(this,'#3b82f6','#1d4ed8')" title="Bleu"></div>
-  <div class="theme-dot" style="background:#ec4899" onclick="setTheme(this,'#ec4899','#be185d')" title="Rose"></div>
-  <div class="theme-dot" style="background:#22c55e" onclick="setTheme(this,'#22c55e','#15803d')" title="Vert"></div>
+  <span style="font-size:1rem">🎨</span>
+  <input type="range" class="theme-slider" id="hueSlider" min="0" max="360" value="45" oninput="setThemeHue(this.value)">
 </div>
 
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
@@ -419,14 +427,26 @@ const PRODUCTS = [
           en:"Hexagonal wall lamp with a 3D cube pattern and a built-in LED shelf."}
   },
   {
-    id:"ruban", price:11, unit:{fr:"/ mètre",ar:"/ متر",en:"/ meter"}, oldPrice:null, badge:{fr:"Multicolore 🌈",ar:"ألوان متعددة 🌈",en:"Multicolor 🌈"}, badgeClass:"purple",
+    id:"ruban", price:100, unit:{fr:"/ mètre",ar:"/ متر",en:"/ meter"}, oldPrice:null, badge:{fr:"Multicolore 🌈",ar:"ألوان متعددة 🌈",en:"Multicolor 🌈"}, badgeClass:"purple",
     img:IMG_RUBAN, fallback:IMG_RUBAN,
     gallery:{home:null, dark:null, packaging:null},
     dims:null,
+    tiers:[
+      {meters:10, price:100},
+      {meters:20, price:200},
+      {meters:30, price:300},
+      {meters:40, price:400},
+      {meters:50, price:500},
+      {meters:60, price:600},
+      {meters:70, price:700},
+      {meters:80, price:800},
+      {meters:90, price:900},
+      {meters:100, price:900, oldPrice:1000}
+    ],
     name:{fr:"Ruban LED Multicolore",ar:"شريط LED متعدد الألوان",en:"Multicolor LED Strip"},
-    desc:{fr:"Ruban LED haute qualité, disponible en plusieurs couleurs, prix au mètre.",
-          ar:"شريط LED عالي الجودة، متوفر بعدة ألوان، السعر بالمتر.",
-          en:"High-quality LED strip, available in several colors, priced per meter."}
+    desc:{fr:"Ruban LED haute qualité, disponible en plusieurs couleurs. Choisissez la longueur souhaitée.",
+          ar:"شريط LED عالي الجودة، متوفر بعدة ألوان. اختر الطول المرغوب.",
+          en:"High-quality LED strip, available in several colors. Choose your desired length."}
   },
   {
     id:"plafonnier", price:500, oldPrice:null, badge:{fr:"Nouveauté ✨",ar:"جديد ✨",en:"New ✨"}, badgeClass:"",
@@ -462,6 +482,8 @@ const I18N = {
     review_comment_label:"Votre commentaire",
     review_submit:"Envoyer mon avis",
     order_now:"Commander maintenant 📲",
+    from_label:"À partir de",
+    instead_of:"au lieu de",
     add_to_cart:"Ajouter au panier",
     added_to_cart:"Ajouté ✓",
     cart_title:"Mon panier",
@@ -511,6 +533,8 @@ const I18N = {
     review_comment_label:"تعليقك",
     review_submit:"إرسال التقييم",
     order_now:"اطلب الآن 📲",
+    from_label:"ابتداءً من",
+    instead_of:"بدل",
     add_to_cart:"أضف إلى السلة",
     added_to_cart:"تمت الإضافة ✓",
     cart_title:"سلة المشتريات",
@@ -560,6 +584,8 @@ const I18N = {
     review_comment_label:"Your comment",
     review_submit:"Submit review",
     order_now:"Order now 📲",
+    from_label:"From",
+    instead_of:"instead of",
     add_to_cart:"Add to cart",
     added_to_cart:"Added ✓",
     cart_title:"My cart",
@@ -625,9 +651,40 @@ function renderProducts(){
   PRODUCTS.forEach(p=>{
     const card = document.createElement("div");
     card.className = "product-card";
-    const priceOld = p.oldPrice ? `<span class="price-old">${p.oldPrice} DH</span>` : "";
-    const unitLabel = p.unit ? `<span class="price-old" style="text-decoration:none">${p.unit[currentLang]}</span>` : "";
     const media = `<img src="${p.img}" onerror="this.src='${p.fallback}'" alt="${p.name[currentLang]}">`;
+
+    let priceBlock, controlsBlock, addBtnHtml;
+
+    if(p.tiers){
+      const lowestPrice = p.tiers[0].price;
+      priceBlock = `<div class="price-row"><span class="price">${I18N[currentLang].from_label} ${lowestPrice} DH</span></div>`;
+      const options = p.tiers.map((tier,i)=>{
+        const label = tier.oldPrice
+          ? `${tier.meters}m — ${tier.price} DH (${I18N[currentLang].instead_of} ${tier.oldPrice} DH) 🔥`
+          : `${tier.meters}m — ${tier.price} DH`;
+        return `<option value="${i}">${label}</option>`;
+      }).join("");
+      controlsBlock = `
+        <div class="field" style="margin-bottom:0">
+          <select id="tier-${p.id}" style="width:100%">${options}</select>
+        </div>
+      `;
+      addBtnHtml = `<button class="add-cart" id="add-${p.id}" onclick="addTierToCart('${p.id}')">${I18N[currentLang].add_to_cart}</button>`;
+    } else {
+      const priceOld = p.oldPrice ? `<span class="price-old">${p.oldPrice} DH</span>` : "";
+      const unitLabel = p.unit ? `<span class="price-old" style="text-decoration:none">${p.unit[currentLang]}</span>` : "";
+      priceBlock = `<div class="price-row"><span class="price">${p.price} DH</span>${unitLabel}${priceOld}</div>`;
+      controlsBlock = `
+        <div class="qty-row">
+          <div class="qty-ctrl">
+            <button onclick="changeQty('${p.id}',-1)">−</button>
+            <span id="qty-${p.id}">${quantities[p.id]}</span>
+            <button onclick="changeQty('${p.id}',1)">+</button>
+          </div>
+        </div>
+      `;
+      addBtnHtml = `<button class="add-cart" id="add-${p.id}" onclick="addToCart('${p.id}')">${I18N[currentLang].add_to_cart}</button>`;
+    }
 
     card.innerHTML = `
       <div class="product-media" id="media-${p.id}">
@@ -639,15 +696,9 @@ function renderProducts(){
       <div class="product-body">
         <h3>${p.name[currentLang]}</h3>
         <p class="desc">${p.desc[currentLang]}</p>
-        <div class="price-row"><span class="price">${p.price} DH</span>${unitLabel}${priceOld}</div>
-        <div class="qty-row">
-          <div class="qty-ctrl">
-            <button onclick="changeQty('${p.id}',-1)">−</button>
-            <span id="qty-${p.id}">${quantities[p.id]}</span>
-            <button onclick="changeQty('${p.id}',1)">+</button>
-          </div>
-        </div>
-        <button class="add-cart" id="add-${p.id}" onclick="addToCart('${p.id}')">${I18N[currentLang].add_to_cart}</button>
+        ${priceBlock}
+        ${controlsBlock}
+        ${addBtnHtml}
       </div>
     `;
     grid.appendChild(card);
@@ -673,18 +724,26 @@ function toggleLight(id){
 }
 
 /* ---- theme switcher ---- */
-function setTheme(el, gold, deep){
+function hslToHex(h, s, l){
+  s/=100; l/=100;
+  const k = n => (n + h/30) % 12;
+  const a = s * Math.min(l, 1-l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n)-3, Math.min(9-k(n), 1)));
+  const toHex = x => Math.round(255*x).toString(16).padStart(2,"0");
+  return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+}
+function setThemeHue(hue){
+  const gold = hslToHex(hue, 85, 55);
+  const deep = hslToHex(hue, 85, 38);
   document.documentElement.style.setProperty("--gold", gold);
   document.documentElement.style.setProperty("--gold-deep", deep);
-  localStorage.setItem("ayourTheme", JSON.stringify({gold, deep}));
-  document.querySelectorAll(".theme-dot").forEach(d=>d.classList.remove("active"));
-  el.classList.add("active");
+  localStorage.setItem("ayourThemeHue", hue);
 }
 (function initTheme(){
-  const saved = JSON.parse(localStorage.getItem("ayourTheme") || "null");
-  if(saved){
-    document.documentElement.style.setProperty("--gold", saved.gold);
-    document.documentElement.style.setProperty("--gold-deep", saved.deep);
+  const saved = localStorage.getItem("ayourThemeHue");
+  if(saved !== null){
+    document.getElementById("hueSlider").value = saved;
+    setThemeHue(saved);
   }
 })();
 
@@ -725,8 +784,8 @@ function saveCart(){ localStorage.setItem("ayourCart", JSON.stringify(cart)); }
 
 function addToCart(id){
   const qty = quantities[id];
-  const existing = cart.find(c=>c.id===id);
-  if(existing){ existing.qty += qty; } else { cart.push({id, qty}); }
+  const existing = cart.find(c=>(c.cartId||c.id)===id);
+  if(existing){ existing.qty += qty; } else { cart.push({cartId:id, id, qty}); }
   saveCart();
   renderCart();
   const btn = document.getElementById("add-"+id);
@@ -739,19 +798,45 @@ function addToCart(id){
   if(qtyEl) qtyEl.textContent = 1;
 }
 
-function cartChangeQty(id, delta){
-  const item = cart.find(c=>c.id===id);
+function addTierToCart(id){
+  const select = document.getElementById("tier-"+id);
+  const tierIndex = parseInt(select.value);
+  const p = PRODUCTS.find(pp=>pp.id===id);
+  const tier = p.tiers[tierIndex];
+  const cartId = `${id}__${tierIndex}`;
+  const existing = cart.find(c=>c.cartId===cartId);
+  if(existing){ existing.qty += 1; } else {
+    cart.push({cartId, id, qty:1, unitPrice:tier.price, label:tier.meters+"m"});
+  }
+  saveCart();
+  renderCart();
+  const btn = document.getElementById("add-"+id);
+  const original = I18N[currentLang].add_to_cart;
+  btn.textContent = I18N[currentLang].added_to_cart;
+  btn.classList.add("added");
+  setTimeout(()=>{ btn.textContent = original; btn.classList.remove("added"); }, 1200);
+}
+
+function cartChangeQty(cartId, delta){
+  const item = cart.find(c=>(c.cartId||c.id)===cartId);
   if(!item) return;
   item.qty += delta;
-  if(item.qty <= 0){ cart = cart.filter(c=>c.id!==id); }
+  if(item.qty <= 0){ cart = cart.filter(c=>(c.cartId||c.id)!==cartId); }
   saveCart();
   renderCart();
 }
 
-function removeFromCart(id){
-  cart = cart.filter(c=>c.id!==id);
+function removeFromCart(cartId){
+  cart = cart.filter(c=>(c.cartId||c.id)!==cartId);
   saveCart();
   renderCart();
+}
+
+function cartLineInfo(c){
+  const p = PRODUCTS.find(pp=>pp.id===c.id);
+  const unitPrice = (typeof c.unitPrice === "number") ? c.unitPrice : p.price;
+  const label = c.label || null;
+  return {p, unitPrice, label};
 }
 
 function renderCart(){
@@ -768,21 +853,23 @@ function renderCart(){
 
   let subtotal = 0;
   body.innerHTML = cart.map(c=>{
-    const p = PRODUCTS.find(pp=>pp.id===c.id);
-    subtotal += p.price * c.qty;
+    const {p, unitPrice, label} = cartLineInfo(c);
+    const cartId = c.cartId || c.id;
+    subtotal += unitPrice * c.qty;
+    const nameLine = label ? `${p.name[currentLang]} (${label})` : p.name[currentLang];
     return `
       <div class="cart-item">
         <img src="${p.img}" onerror="this.src='${p.fallback}'">
         <div class="info">
-          <h5>${p.name[currentLang]}</h5>
-          <div class="p">${p.price} DH${p.unit ? " "+p.unit[currentLang] : ""}</div>
+          <h5>${nameLine}</h5>
+          <div class="p">${unitPrice} DH${(!label && p.unit) ? " "+p.unit[currentLang] : ""}</div>
           <div class="qty-ctrl">
-            <button onclick="cartChangeQty('${p.id}',-1)">−</button>
+            <button onclick="cartChangeQty('${cartId}',-1)">−</button>
             <span>${c.qty}</span>
-            <button onclick="cartChangeQty('${p.id}',1)">+</button>
+            <button onclick="cartChangeQty('${cartId}',1)">+</button>
           </div>
         </div>
-        <button class="remove-btn" onclick="removeFromCart('${p.id}')">🗑️</button>
+        <button class="remove-btn" onclick="removeFromCart('${cartId}')">🗑️</button>
       </div>
     `;
   }).join("");
@@ -832,8 +919,9 @@ function checkoutWhatsapp(subtotal){
   const discount = PROMO_CODES[promo.toLowerCase()] || 0;
   const total = Math.round(subtotal * (1 - discount));
   let lines = cart.map(c=>{
-    const p = PRODUCTS.find(pp=>pp.id===c.id);
-    return `- ${p.name[currentLang]} x${c.qty} (${p.price*c.qty} DH)`;
+    const {p, unitPrice, label} = cartLineInfo(c);
+    const nameLine = label ? `${p.name[currentLang]} (${label})` : p.name[currentLang];
+    return `- ${nameLine} x${c.qty} (${unitPrice*c.qty} DH)`;
   }).join("%0A");
   const msg = `Nouvelle commande / طلب جديد 🛒:%0A` +
     `${lines}%0A` +
